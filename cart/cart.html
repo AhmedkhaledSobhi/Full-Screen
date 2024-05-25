@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة الخصومات والضرائب</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+        }
+        label, input, select {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>حاسبة الخصومات والضرائب</h1>
+
+    <label for="price">سعر المنتج:</label>
+    <input type="number" id="price" step="0.01" min="0" oninput="calculate()">
+
+    <label for="discount-type">نوع الخصم:</label>
+    <select id="discount-type" onchange="calculate()">
+        <option value="before-tax-percent">خصم قبل الضريبة نسبة مئوية</option>
+        <option value="before-tax-fixed">خصم قبل الضريبة نسبة ثابتة</option>
+        <option value="after-tax-percent">خصم بعد الضريبة نسبة مئوية</option>
+        <option value="after-tax-fixed">خصم نسبة ثابتة بعد الضريبة</option>
+    </select>
+
+    <label for="discount-value">قيمة الخصم:</label>
+    <input type="number" id="discount-value" step="0.01" min="0" oninput="calculate()">
+
+    <label for="tax-type">نوع الضريبة:</label>
+    <select id="tax-type" onchange="calculate()">
+        <option value="inclusive">شامل الضريبة</option>
+        <option value="exclusive">غير شامل الضريبة</option>
+    </select>
+
+    <label for="tax-rate">نسبة الضريبة (%):</label>
+    <input type="number" id="tax-rate" step="0.01" min="0" oninput="calculate()">
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function calculate() {
+            let price = parseFloat(document.getElementById('price').value);
+            let discountType = document.getElementById('discount-type').value;
+            let discountValue = parseFloat(document.getElementById('discount-value').value);
+            let taxType = document.getElementById('tax-type').value;
+            let taxRate = parseFloat(document.getElementById('tax-rate').value);
+
+
+
+            console.log('price ----' ,price);
+            console.log('discountType ----' , discountType );
+            console.log('discountValue ---' , discountValue );
+            console.log('taxType ---' , taxType );
+            console.log('taxRate ---' ,  taxRate );
+
+
+            if (isNaN(price) || price <= 0) {
+                document.getElementById('result').innerText = 'يرجى إدخال سعر صالح';
+                return;
+            }
+
+            if (isNaN(taxRate) || taxRate < 0) {
+                document.getElementById('result').innerText = 'يرجى إدخال نسبة ضريبة صالحة';
+                return;
+            }
+
+            let discountedPrice = price;
+            let finalPrice = 0;
+            let taxAmount = 0;
+
+            if (!isNaN(discountValue) && discountValue > 0) {
+                if (discountType === 'before-tax-percent') {
+                    // نسبة مئوية من السعر قبل الضريبة
+                    discountedPrice = price - (price * (discountValue / 100));
+                } else if (discountType === 'before-tax-fixed') {
+                    // قيمة ثابتة من السعر قبل الضريبة
+                    discountedPrice = price - discountValue;
+                }
+            }
+
+            if (taxType === 'exclusive') {
+                taxAmount = discountedPrice * (taxRate / 100);
+                discountedPrice += taxAmount;
+            }
+
+            if (!isNaN(discountValue) && discountValue > 0) {
+                if (discountType === 'after-tax-percent') {
+                    // نسبة مئوية من السعر بعد الضريبة
+                    finalPrice = discountedPrice - (discountedPrice * (discountValue / 100));
+                } else if (discountType === 'after-tax-fixed') {
+                    // قيمة ثابتة من السعر بعد الضريبة
+                    finalPrice = discountedPrice - discountValue;
+                } else {
+                    finalPrice = discountedPrice;
+                }
+            } else {
+                finalPrice = discountedPrice;
+            }
+
+            if (taxType === 'inclusive') {
+                taxAmount = finalPrice * (taxRate / (100 + taxRate));
+                finalPrice -= taxAmount;
+            }
+
+            document.getElementById('result').innerText = 'السعر النهائي: ' + finalPrice.toFixed(2) + ' ريال (الضريبة: ' + taxAmount.toFixed(2) + ' ريال)';
+        }
+    </script>
+
+</body>
+</html>
