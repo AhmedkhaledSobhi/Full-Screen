@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <h1> full screen</h1>
+
+        <button id="fullscreenButton">full</button>
+
+
+    </div>
+
+
+
+    <script>
+        // document.addEventListener('dblclick', () => {
+        //     document.documentElement.requestFullscreen().catch((e) => {
+        //         console.log(e);
+        //     })
+        // })
+
+        // function toggleFullScreen() {
+        //     if (!document.fullscreenElement) {
+        //         document.documentElement.requestFullscreen()
+        //             .then(() => {
+        //                 console.log('Entered fullscreen mode');
+        //             })
+        //             .catch((error) => {
+        //                 console.error('Failed to enter fullscreen mode:', error);
+        //             });
+        //     } else {
+        //         document.exitFullscreen()
+        //             .then(() => {
+        //                 console.log('Exited fullscreen mode');
+        //             })
+        //             .catch((error) => {
+        //                 console.error('Failed to exit fullscreen mode:', error);
+        //             });
+        //     }
+        // }
+        function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { // Chrome and Safari
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+            document.documentElement.msRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { // Chrome and Safari
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen();
+        }
+    }
+}
+
+// Call the toggleFullScreen function to toggle fullscreen mode
+// toggleFullScreen();
+
+
+
+        // Function to handle button click
+        function handleButtonClick() {
+            toggleFullScreen();
+        }
+
+        // Add event listener to the button
+        document.getElementById("fullscreenButton").addEventListener("click", handleButtonClick);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        window.onload = openfullscreen();
+
+        function launchIntoFullscreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+        }
+
+        function openfullscreen() {
+
+            launchIntoFullscreen(document.documentElement);
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+            window.close();
+        }
+
+        function fix() {
+            var screenwidth = screen.width;
+            var screenhei = screen.height;
+            document.getElementById('ifam').width = screenwidth;
+            document.getElementById('ifam').height = screenhei;
+        }
+    </script>
+    <style>
+        #ifam {
+            position: fixed;
+            left: 0%;
+            top: 0%;
+            z-index: -1;
+        }
+
+        #fullscreen {
+            position: fixed;
+            left: 0%;
+            top: 0%;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body onload="fix()">
+    <div id="fullscreen">
+        <button onclick="openfullscreen()">Open</button>
+        <button onclick="exitFullscreen()">Exit</button>
+    </div>
+    <iframe id="ifam" src="lchosser.html"></iframe>
+</body>
+
+</html>
